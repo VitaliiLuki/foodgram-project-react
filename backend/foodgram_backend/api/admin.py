@@ -23,7 +23,7 @@ class TagInline(admin.TabularInline):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'author', 'name')
+    list_display = ('id', 'author', 'name', 'favorite_count')
     list_filter = ('author', 'name', 'tags')
     empty_value_display = '-пусто-'
     inlines = [
@@ -32,10 +32,14 @@ class RecipeAdmin(admin.ModelAdmin):
     ]
     exclude = ('ingredients',)
 
+    def favorite_count(self, obj):
+        return RecipeFavourite.objects.filter(recipe=obj).count()
+
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'units')
+    search_fields = ('name',)
 
 
 @admin.register(IngredientRecipe)
