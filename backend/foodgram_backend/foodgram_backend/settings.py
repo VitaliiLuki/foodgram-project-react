@@ -181,10 +181,11 @@ REST_FRAMEWORK = {
 #     '127.0.0.1'
 # ]
 
-# CSRF_TRUSTED_ORIGINS = [
-#     'http://*127.0.0.1/',
-#     'http://127.0.0.1/',
-#     'https://*127.0.0.1/',
-#     'http://*localhost:8000',
-#     'https://*localhost:8000',
-# ]
+CSRF_TRUSTED_ORIGINS = [
+    'http://*158.160.55.187/',
+    'http://*158.160.55.187/',
+    'http://127.0.0.1/',
+    'https://*127.0.0.1/',
+    'http://*localhost:8000',
+    'https://*localhost:8000',
+]
