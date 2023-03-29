@@ -61,8 +61,8 @@ jobs:
             sudo docker-compose rm frontend
             sudo docker image rm --force ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1
             sudo docker image rm --force ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-project
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-project:v1
             rm .env
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
