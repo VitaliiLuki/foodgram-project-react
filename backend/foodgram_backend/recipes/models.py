@@ -40,8 +40,12 @@ class Ingredient(models.Model):
 
 class IngredientRecipe(models.Model):
     """Contains information btw recipe and ingredient."""
-    ingredient = models.ForeignKey(Ingredient, related_name='ingredient_recipe', on_delete=models.CASCADE)
-    recipe = models.ForeignKey(Recipe, related_name='ingredient_recipe', on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient,
+                                   related_name='ingredient_recipe',
+                                   on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe,
+                               related_name='ingredient_recipe',
+                               on_delete=models.CASCADE)
     amount = models.PositiveSmallIntegerField()
 
     def __str__(self):
@@ -56,7 +60,7 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     class Meta:
         ordering = ['slug']
 
@@ -97,4 +101,4 @@ class ShoppingCart(models.Model):
 class RecipeShoppingCart(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     shopping_cart = models.ForeignKey(ShoppingCart,
-                                         on_delete=models.CASCADE)
+                                      on_delete=models.CASCADE)

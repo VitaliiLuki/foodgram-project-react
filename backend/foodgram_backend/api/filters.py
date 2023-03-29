@@ -1,9 +1,10 @@
 import django_filters
-
-from recipes.models import Recipe, Tag, Ingredient
+from django_filters import rest_framework as filters
+from recipes.models import Ingredient, Recipe, Tag
 
 
 class IngredientFilter(django_filters.FilterSet):
+    """Филтрация ингредиента по полю name."""
     name = django_filters.CharFilter(method='filter_name')
 
     class Meta:
@@ -18,19 +19,21 @@ class IngredientFilter(django_filters.FilterSet):
         return ['name']
 
 
-class RecipeFilter(django_filters.FilterSet):
+class RecipeFilter(filters.FilterSet):
     """
-    Gives an option to filtrate the fields below when you make a get-request 
-    to find a recipe which matches to your search.
+    Фильтрация рецептов по тегам, автору, избранному и рецептам,
+    добавленным в корзину.
     """
-    tags = django_filters.ModelMultipleChoiceFilter(
+    tags = filters.ModelMultipleChoiceFilter(
         field_name='tags__slug',
         to_field_name='slug',
         queryset=Tag.objects.all()
     )
-    author = django_filters.CharFilter(field_name='author__id')
-    is_favorited = django_filters.CharFilter(method='get_is_favorited')
-    is_in_shopping_cart = django_filters.CharFilter(method='get_is_in_shopping_cart')
+    author = filters.CharFilter(field_name='author__id')
+    is_favorited = filters.CharFilter(method='get_is_favorited')
+    is_in_shopping_cart = filters.CharFilter(
+        method='get_is_in_shopping_cart'
+    )
 
     class Meta:
         model = Recipe
@@ -39,11 +42,11 @@ class RecipeFilter(django_filters.FilterSet):
     def get_is_favorited(self, queryset, name, value):
         user = self.request.user
         if value:
-            return Recipe.objects.filter(favourite__user=user)
-        return Recipe.objects.all()
+            return queryset.filter(favourite__user=user)
+        return queryset
 
     def get_is_in_shopping_cart(self, queryset, name, value):
         user = self.request.user
         if value:
-            return Recipe.objects.filter(shoppingcart__user=user)
-        return Recipe.objects.all()
+            return queryset.filter(shoppingcart__user=user)
+        return queryset

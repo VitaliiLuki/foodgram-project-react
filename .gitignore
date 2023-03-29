@@ -132,4 +132,10 @@ dmypy.json
 .idea
 
 # media
-./foodgram_backend/media/
+*media/
+
+# vscode config
+.vscode
+
+# macOS files
+*.DS_Store

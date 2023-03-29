@@ -3,9 +3,11 @@ from rest_framework import permissions
 
 class IsAuthorOrReadOnlyPermission(permissions.BasePermission):
     """
-    Permissions: 
-    Get list, retrieve for all users, create for authenticated, 
-    patch or delete for author.
+    Разрешения:
+    Просмотр списка и детальной информации рецептов -
+    для всех пользовательских ролей,
+    Создание рецепта для аутентифицированных пользователей,
+    удаление и обновление - только для атора.
     """
 
     def has_permission(self, request, view):

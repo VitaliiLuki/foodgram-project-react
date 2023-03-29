@@ -1,8 +1,7 @@
 from django.contrib import admin
-
-from recipes.models import (Ingredient, Recipe, Tag, IngredientRecipe,
-                            Follow, ShoppingCart, RecipeShoppingCart,
-                            TagRecipe, Favourite, RecipeFavourite)
+from recipes.models import (Favourite, Follow, Ingredient, IngredientRecipe,
+                            Recipe, RecipeFavourite, RecipeShoppingCart,
+                            ShoppingCart, Tag, TagRecipe)
 from users.models import User
 
 
@@ -86,6 +85,7 @@ class RecipeFavouriteAdmin(admin.ModelAdmin):
 
 class RecipesInline(admin.TabularInline):
     model = Favourite.recipes.through
+
 
 @admin.register(Favourite)
 class FavouriteAdmin(admin.ModelAdmin):
