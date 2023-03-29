@@ -2,9 +2,6 @@ version: '3.8'
 services:
 
   frontend:
-    # build:
-    #   context: ../frontend
-    #   dockerfile: Dockerfile
     image: vitaliiluki/foodgram_frontend:v1
     volumes:
       - ../frontend/:/app/result_build/
@@ -17,7 +14,6 @@ services:
       - ./.env
 
   web:
-    # build: ../backend/foodgram_backend/
     image: vitaliiluki/foodgram_backend:v1
     restart: always
     volumes:
