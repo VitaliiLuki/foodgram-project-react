@@ -2,9 +2,10 @@ version: '3.8'
 services:
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    # build:
+    #   context: ../frontend
+    #   dockerfile: Dockerfile
+    image: vitaliiluki/foodgram_frontend:v1
     volumes:
       - ../frontend/:/app/result_build/
 
@@ -16,11 +17,12 @@ services:
       - ./.env
 
   web:
-    build: ../backend/foodgram_backend/
+    # build: ../backend/foodgram_backend/
+    image: vitaliiluki/foodgram_backend:v1
     restart: always
     volumes:
-      - static_value:/app/static/
-      - media_value:/app/media/
+      - static_value:/backend/static/
+      - media_value:/backend/media/
     depends_on:
       - db_postgres
     env_file:

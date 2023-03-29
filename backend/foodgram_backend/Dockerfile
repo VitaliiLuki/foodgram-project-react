@@ -1,16 +1,13 @@
 FROM python:3.8-slim
 
-WORKDIR /app
+WORKDIR /backend
 
-COPY requirements.txt /app
+COPY requirements.txt /backend
 
 RUN python -m pip install --upgrade pip
 
-RUN pip3 install -r /app/requirements.txt --no-cache-dir
+RUN pip3 install -r /backend/requirements.txt --no-cache-dir
 
-COPY . /app
-
-# RUN python manage.py migrate
-# RUN python manage.py collectstatic --no-input
+COPY . /backend
 
 CMD ["gunicorn", "foodgram_backend.wsgi:application", "--bind", "0:8000" ]
