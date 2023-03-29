@@ -57,12 +57,12 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
             sudo docker-compose stop
-            sudo docker-compose rm web
-            sudo docker-compose rm frontend
+            sudo docker-compose rm --force web
+            sudo docker-compose rm --force frontend
             sudo docker image rm --force ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1
             sudo docker image rm --force ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-project:v1
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1
             rm .env
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
