@@ -59,8 +59,8 @@ jobs:
             sudo docker-compose stop
             sudo docker-compose rm web
             sudo docker-compose rm frontend
-            sudo docker image rm ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1
-            sudo docker image rm ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1
+            sudo docker image rm --force ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1
+            sudo docker image rm --force ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-project
             rm .env
