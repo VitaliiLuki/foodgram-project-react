@@ -1,5 +1,4 @@
 import django_filters
-from django_filters import rest_framework as filters
 from recipes.models import Ingredient, Recipe, Tag
 
 
@@ -19,19 +18,19 @@ class IngredientFilter(django_filters.FilterSet):
         return ['name']
 
 
-class RecipeFilter(filters.FilterSet):
+class RecipeFilter(django_filters.FilterSet):
     """
     Фильтрация рецептов по тегам, автору, избранному и рецептам,
     добавленным в корзину.
     """
-    tags = filters.ModelMultipleChoiceFilter(
+    tags = django_filters.ModelMultipleChoiceFilter(
         field_name='tags__slug',
         to_field_name='slug',
         queryset=Tag.objects.all()
     )
-    author = filters.CharFilter(field_name='author__id')
-    is_favorited = filters.CharFilter(method='get_is_favorited')
-    is_in_shopping_cart = filters.CharFilter(
+    author = django_filters.CharFilter(field_name='author__id')
+    is_favorited = django_filters.CharFilter(method='get_is_favorited')
+    is_in_shopping_cart = django_filters.CharFilter(
         method='get_is_in_shopping_cart'
     )
 

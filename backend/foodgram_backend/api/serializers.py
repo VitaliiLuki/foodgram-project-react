@@ -26,8 +26,13 @@ class IngridientGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ingredient
+        # Задаю все необходимые поля вручную, т.к у меня
+        # в модели Ingredient за единицу измерения отвечает поле units,
+        # а в response требуется measurement_unit.
+        # Если задать __all__ при текущей реализации, в вывод добавиться
+        # еще поле measurement_unit
         fields = ('id', 'name', 'measurement_unit',)
-        read_only_fields = ('id', 'name', 'measurement_unit', )
+        # read_only_fields = ('id', 'name', 'measurement_unit', )
 
 
 class IngredientRecipeSerializer(serializers.ModelSerializer):
@@ -52,21 +57,6 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = IngredientRecipe
         fields = ('id', 'name', 'measurement_unit', 'amount',)
-
-
-class TagRecipeSerializer(serializers.ModelSerializer):
-    """
-    Вспомогательный сериализатор для создания рецептов.
-    В Post-запросе передается пара id тега.
-    """
-    id = serializers.CharField(source='tag_id')
-    name = serializers.CharField(source='tag.name', read_only=True)
-    color = serializers.CharField(source='tag.hex_code', read_only=True)
-    slug = serializers.CharField(source='tag.slug', read_only=True)
-
-    class Meta:
-        model = TagRecipe
-        fields = ('id', 'name', 'color', 'slug')
 
 
 class TagGetSerializer(serializers.ModelSerializer):
@@ -110,8 +100,7 @@ class UserSerializer(serializers.ModelSerializer):
                   'recipes')
         read_only_fields = ('id', 'is_subscribed', 'recipes')
 
-    def get_is_subscribed(self, object):
-        author = object
+    def get_is_subscribed(self, author):
         follower = self.context['view'].request.user
         if follower.is_anonymous:
             return False
@@ -161,7 +150,9 @@ class TokenCreateSerializer(serializers.Serializer):
     email = serializers.EmailField(
         required=True
     )
+
     password = serializers.CharField(
+        # Значение длины указано в redoc
         max_length=150,
         required=True
     )
@@ -265,7 +256,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         return response
 
     def validate_ingredients(self, ingredients):
-        if len(ingredients) < 1:
+        if not len(ingredients):
             raise serializers.ValidationError('Добавьте хотя бы 1 ингредиент!')
         ingr_set = set()
         for ingredient in ingredients:
@@ -289,6 +280,9 @@ class RecipeSerializer(serializers.ModelSerializer):
 
 class SubscriptionsSerializer(serializers.ModelSerializer):
     """Сериализатор подписок."""
+
+    DEFAULT_LIMIT = 3
+
     is_subscribed = serializers.SerializerMethodField()
     recipes = RecipesGetSerializer(many=True)
     recipes_count = serializers.SerializerMethodField()
@@ -309,13 +303,12 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
         return Follow.objects.filter(author=obj, follower=me).exists()
 
     def get_recipes_count(self, obj):
-        return len(obj.recipes.all())
+        return obj.recipes.all().count()
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
-        default_amount = 3
         request = self.context.get('request')
-        limit = request.GET.get('recipes_limit', default_amount)
+        limit = request.GET.get('recipes_limit', self.DEFAULT_LIMIT)
         response['recipes'] = response['recipes'][:int(limit)]
         return response
 

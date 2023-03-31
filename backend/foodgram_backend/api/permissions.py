@@ -1,7 +1,7 @@
 from rest_framework import permissions
 
 
-class IsAuthorOrReadOnlyPermission(permissions.BasePermission):
+class AuthorOrReadOnly(permissions.BasePermission):
     """
     Разрешения:
     Просмотр списка и детальной информации рецептов -
@@ -11,10 +11,9 @@ class IsAuthorOrReadOnlyPermission(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        if view.action == 'create':
-            return request.user.is_authenticated
-        else:
-            return True
+        print(view)
+        return (request.method in permissions.SAFE_METHODS
+                or request.user.is_authenticated)
 
     def has_object_permission(self, request, view, obj):
         return (request.method in permissions.SAFE_METHODS

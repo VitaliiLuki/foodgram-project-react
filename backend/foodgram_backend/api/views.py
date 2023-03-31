@@ -4,7 +4,6 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.encoding import smart_str
-from django_filters.rest_framework import DjangoFilterBackend
 from djoser.serializers import SetPasswordSerializer
 from recipes.models import (Favourite, Follow, Ingredient, Recipe,
                             RecipeFavourite, RecipeShoppingCart, ShoppingCart,
@@ -12,13 +11,13 @@ from recipes.models import (Favourite, Follow, Ingredient, Recipe,
 from rest_framework import mixins, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action, api_view
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from users.models import User
 
 from .filters import IngredientFilter, RecipeFilter
 from .pagination import SubscriptionPagination
-from .permissions import IsAuthorOrReadOnlyPermission
+from .permissions import AuthorOrReadOnly
 from .serializers import (FollowSerializer, IngridientGetSerializer,
                           RecipeSerializer, RecipesGetSerializer,
                           SubscriptionsSerializer, TagGetSerializer,
@@ -50,12 +49,11 @@ class UserViewSet(CreateListRetrieveViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [AllowAny, ]
 
     @action(
         detail=False,
         methods=['GET'],
-        permission_classes=[IsAuthenticated, ],
+        permission_classes=[IsAuthenticated],
         url_path='me',
         url_name='my_profile'
     )
@@ -69,7 +67,7 @@ class UserViewSet(CreateListRetrieveViewSet):
     @action(
         detail=False,
         methods=['POST'],
-        permission_classes=[IsAuthenticated, ],
+        permission_classes=[IsAuthenticated],
         url_path='set_password',
         url_name='change_password'
     )
@@ -89,7 +87,7 @@ class UserViewSet(CreateListRetrieveViewSet):
     @action(
         detail=True,
         methods=['POST', 'DELETE'],
-        permission_classes=[IsAuthenticated, ],
+        permission_classes=[IsAuthenticated],
         url_path='subscribe',
         url_name='subscribe_or_unsubscribe'
     )
@@ -132,7 +130,7 @@ class UserViewSet(CreateListRetrieveViewSet):
     @action(
         detail=False,
         methods=['GET'],
-        permission_classes=[IsAuthenticated, ],
+        permission_classes=[IsAuthenticated],
         url_path='subscriptions',
         url_name='my_subscriptions'
     )
@@ -150,8 +148,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     """Создание рецепта, просмотр списка или отдельного рецепта."""
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
-    permission_classes = (IsAuthorOrReadOnlyPermission,)
-    filter_backends = (DjangoFilterBackend,)
+    permission_classes = [AuthorOrReadOnly]
     filterset_class = RecipeFilter
 
     def perform_create(self, serializer):
@@ -160,7 +157,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(
         detail=True,
         methods=['POST', 'DELETE'],
-        permission_classes=[IsAuthenticated, ],
+        permission_classes=[IsAuthenticated],
         url_path='favorite',
         url_name='add_or_delete_favorite'
     )
@@ -204,7 +201,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(
         detail=True,
         methods=['POST', 'DELETE'],
-        permission_classes=[IsAuthenticated, ],
+        permission_classes=[IsAuthenticated],
         url_path='shopping_cart',
         url_name='add_or_delete_recipe_from_shopping_cart'
     )
@@ -254,7 +251,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(
         detail=False,
         methods=['GET'],
-        permission_classes=[IsAuthenticated, ],
+        permission_classes=[IsAuthenticated],
         url_path='download_shopping_cart',
         url_name='download_shopping_cart'
     )
@@ -291,7 +288,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(
         detail=True,
         methods=['POST', 'DELETE'],
-        permission_classes=[IsAuthenticated, ],
+        permission_classes=[IsAuthenticated],
         url_path='subscribe',
         url_name='subscribe_or_unsubscribe'
     )

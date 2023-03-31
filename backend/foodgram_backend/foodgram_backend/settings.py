@@ -24,16 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-bxwawzla040yg&c&(szs6oq-q4_bsu&f+*y#%(a7jg%r15s*o_'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['0.0.0.0',
-                 '127.0.0.1',
-                 'localhost',
-                 '158.160.55.187',
-                 'web']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -153,11 +149,12 @@ AUTH_USER_MODEL = 'users.User'
 
 # Authentication
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
-    'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend',),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication'
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny'
     ],
@@ -167,10 +164,6 @@ REST_FRAMEWORK = {
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://*158.160.55.187/',
-    'http://*158.160.55.187/',
-    'http://127.0.0.1/',
-    'https://*127.0.0.1/',
-    'http://*localhost:8000',
-    'https://*localhost:8000',
+    'http://127.0.0.1',
+    'http://158.160.55.187'
 ]
