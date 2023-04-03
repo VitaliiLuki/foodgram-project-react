@@ -3,7 +3,7 @@ from django.db import models
 
 
 class User(AbstractUser):
-    """Create and saves a user's data"""
+    """Создает и сохраняет нового пользователя."""
     USER = 'user'
     ADMIN = 'admin'
 
@@ -43,11 +43,11 @@ class User(AbstractUser):
 
     @property
     def is_user(self):
-        return self.role == User.USER
+        return self.role == self.USER
 
     @property
     def is_admin(self):
-        return (self.role == User.ADMIN or self.is_superuser
+        return (self.role == self.ADMIN or self.is_superuser
                 or self.is_staff)
 
     def __str__(self):

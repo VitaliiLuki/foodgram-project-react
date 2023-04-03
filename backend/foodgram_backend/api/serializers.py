@@ -26,13 +26,7 @@ class IngridientGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ingredient
-        # Задаю все необходимые поля вручную, т.к у меня
-        # в модели Ingredient за единицу измерения отвечает поле units,
-        # а в response требуется measurement_unit.
-        # Если задать __all__ при текущей реализации, в вывод добавиться
-        # еще поле measurement_unit
         fields = ('id', 'name', 'measurement_unit',)
-        # read_only_fields = ('id', 'name', 'measurement_unit', )
 
 
 class IngredientRecipeSerializer(serializers.ModelSerializer):
@@ -152,7 +146,6 @@ class TokenCreateSerializer(serializers.Serializer):
     )
 
     password = serializers.CharField(
-        # Значение длины указано в redoc
         max_length=150,
         required=True
     )
