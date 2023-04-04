@@ -165,5 +165,6 @@ REST_FRAMEWORK = {
 
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1',
-    'http://158.160.55.187'
+    'http://84.252.128.167',
+    'http://foodgram.serveblog.net'
 ]
