@@ -136,8 +136,3 @@ sudo docker-compose exec backend python manage.py createsuperuser
 
 
 #### Ознакомиться с рабочей версией сайта можно [тут](http://158.160.55.187/).
-
-#### Логин и пароль для админа на время ревью:
-login: admin
-
-password: admin
